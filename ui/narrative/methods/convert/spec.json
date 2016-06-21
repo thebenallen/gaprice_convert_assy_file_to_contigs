@@ -70,12 +70,12 @@
                     "target_property": "convert_result"
                 },
                 {
-                    "input_parameter": "read_libraries",
-                    "target_property": "input_read_libraries"
+                    "input_parameter": "assembly_file",
+                    "target_property": "input_assembly_file"
                 },
                 {
-                    "input_parameter": "output_contigset_name",
-                    "target_property": "input_output_contigset_name"
+                    "input_parameter": "output_name",
+                    "target_property": "input_output_name"
                 },
                 {
                     "narrative_system_variable": "workspace",
