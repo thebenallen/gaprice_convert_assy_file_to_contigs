@@ -1,9 +1,16 @@
 package us.kbase.convertassyfiletocontigs;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientCaller;
+import us.kbase.common.service.JsonClientException;
+import us.kbase.common.service.RpcContext;
+import us.kbase.common.service.UnauthorizedException;
 
 /**
  * <p>Original spec-file module name: convert_assy_file_to_contigs</p>
@@ -20,6 +27,35 @@ public class ConvertAssyFileToContigsClient {
      */
     public ConvertAssyFileToContigsClient(URL url) {
         caller = new JsonClientCaller(url);
+    }
+    /** Constructs a client with a custom URL.
+     * @param url the URL of the service.
+     * @param token the user's authorization token.
+     * @throws UnauthorizedException if the token is not valid.
+     * @throws IOException if an IOException occurs when checking the token's
+     * validity.
+     */
+    public ConvertAssyFileToContigsClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
+        caller = new JsonClientCaller(url, token);
+    }
+
+    /** Constructs a client with a custom URL.
+     * @param url the URL of the service.
+     * @param user the user name.
+     * @param password the password for the user name.
+     * @throws UnauthorizedException if the credentials are not valid.
+     * @throws IOException if an IOException occurs when checking the user's
+     * credentials.
+     */
+    public ConvertAssyFileToContigsClient(URL url, String user, String password) throws UnauthorizedException, IOException {
+        caller = new JsonClientCaller(url, user, password);
+    }
+
+    /** Get the token this client uses to communicate with the server.
+     * @return the authorization token.
+     */
+    public AuthToken getToken() {
+        return caller.getToken();
     }
 
     /** Get the URL of the service with which this client communicates.
@@ -100,5 +136,22 @@ public class ConvertAssyFileToContigsClient {
 
     public void _setFileForNextRpcResponse(File f) {
         caller.setFileForNextRpcResponse(f);
+    }
+
+    /**
+     * <p>Original spec-file function name: convert</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.convertassyfiletocontigs.ConvertParams ConvertParams}
+     * @return   parameter "output" of type {@link us.kbase.convertassyfiletocontigs.ConvertOutput ConvertOutput}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ConvertOutput convert(ConvertParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ConvertOutput>> retType = new TypeReference<List<ConvertOutput>>() {};
+        List<ConvertOutput> res = caller.jsonrpcCall("convert_assy_file_to_contigs.convert", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
     }
 }

@@ -19,7 +19,7 @@ class convert_assy_file_to_contigs:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = ""
-    GIT_COMMIT_HASH = "7ef4bad49656c0df54e235ff4ff6c06b55021441"
+    GIT_COMMIT_HASH = "787a649ed8ec35da032e89eb88ab4b4081a5660b"
     
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -32,9 +32,41 @@ class convert_assy_file_to_contigs:
         pass
     
 
+    def convert(self, ctx, params):
+        """
+        :param params: instance of type "ConvertParams" (Input parameters for
+           the conversion function. string workspace_name - the name of the
+           workspace from which to take input and store output. string
+           assembly_file - the name of the input KBaseFile.AssemblyFile to
+           convert to a ContigSet. string output_name - the name for the
+           produced ContigSet.) -> structure: parameter "workspace_name" of
+           String, parameter "assembly_file" of String, parameter
+           "output_name" of String
+        :returns: instance of type "ConvertOutput" (Output parameters the
+           conversion. string report_name - the name of the
+           KBaseReport.Report workspace object. string report_ref - the
+           workspace reference of the report.) -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: output
+        #BEGIN convert
+        output = None
+        #END convert
+
+        # At some point might do deeper type checking...
+        if not isinstance(output, dict):
+            raise ValueError('Method convert return value ' +
+                             'output is not type dict as required.')
+        # return the results
+        return [output]
+
     def status(self, ctx):
         #BEGIN_STATUS
-        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
-                     'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
+        returnVal = {'state': "OK", 'message': "",
+                     'version': self.VERSION,
+                     'git_url': self.GIT_URL,
+                     'git_commit_hash': self.GIT_COMMIT_HASH}
+        del ctx
         #END_STATUS
         return [returnVal]
