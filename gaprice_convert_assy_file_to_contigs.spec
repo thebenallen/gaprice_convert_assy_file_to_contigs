@@ -2,7 +2,7 @@
 A KBase module: convert_assy_file_to_contigs
 */
 
-module convert_assy_file_to_contigs {
+module gaprice_convert_assy_file_to_contigs {
 
     /* Input parameters for the conversion function.
         string workspace_name - the name of the workspace from which to take

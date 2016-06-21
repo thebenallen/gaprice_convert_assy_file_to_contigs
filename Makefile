@@ -1,7 +1,7 @@
-SERVICE = convert_assy_file_to_contigs
-SERVICE_CAPS = convert_assy_file_to_contigs
-SPEC_FILE = convert_assy_file_to_contigs.spec
-URL = https://kbase.us/services/convert_assy_file_to_contigs
+SERVICE = gaprice_convert_assy_file_to_contigs
+SERVICE_CAPS = gaprice_convert_assy_file_to_contigs
+SPEC_FILE = gaprice_convert_assy_file_to_contigs.spec
+URL = https://kbase.us/services/gaprice_convert_assy_file_to_contigs
 DIR = $(shell pwd)
 LIB_DIR = lib
 SCRIPTS_DIR = scripts

@@ -12,8 +12,8 @@ except:
 from pprint import pprint
 
 from biokbase.workspace.client import Workspace as workspaceService
-from convert_assy_file_to_contigs.convert_assy_file_to_contigsImpl import convert_assy_file_to_contigs
-from convert_assy_file_to_contigs.convert_assy_file_to_contigsServer import MethodContext
+from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsImpl import gaprice_convert_assy_file_to_contigs
+from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsServer import MethodContext
 
 
 class convert_assy_file_to_contigsTest(unittest.TestCase):
@@ -26,7 +26,7 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         cls.ctx = MethodContext(None)
         cls.ctx.update({'token': token,
                         'provenance': [
-                            {'service': 'convert_assy_file_to_contigs',
+                            {'service': 'gaprice_convert_assy_file_to_contigs',
                              'method': 'please_never_use_it_in_production',
                              'method_params': []
                              }],
@@ -35,11 +35,11 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         cls.cfg = {}
         config = ConfigParser()
         config.read(config_file)
-        for nameval in config.items('convert_assy_file_to_contigs'):
+        for nameval in config.items('gaprice_convert_assy_file_to_contigs'):
             cls.cfg[nameval[0]] = nameval[1]
         cls.wsURL = cls.cfg['workspace-url']
         cls.wsClient = workspaceService(cls.wsURL, token=token)
-        cls.serviceImpl = convert_assy_file_to_contigs(cls.cfg)
+        cls.serviceImpl = gaprice_convert_assy_file_to_contigs(cls.cfg)
 
     @classmethod
     def tearDownClass(cls):
@@ -54,7 +54,7 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         if hasattr(self.__class__, 'wsName'):
             return self.__class__.wsName
         suffix = int(time.time() * 1000)
-        wsName = "test_convert_assy_file_to_contigs_" + str(suffix)
+        wsName = "test_gaprice_convert_assy_file_to_contigs_" + str(suffix)
         ret = self.getWsClient().create_workspace({'workspace': wsName})
         self.__class__.wsName = wsName
         return wsName

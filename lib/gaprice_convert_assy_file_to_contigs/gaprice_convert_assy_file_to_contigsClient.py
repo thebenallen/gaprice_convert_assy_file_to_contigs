@@ -16,7 +16,7 @@ except:
     from baseclient import BaseClient as _BaseClient  # @Reimport
 
 
-class convert_assy_file_to_contigs(object):
+class gaprice_convert_assy_file_to_contigs(object):
 
     def __init__(
             self, url=None, timeout=30 * 60, user_id=None,
@@ -49,5 +49,5 @@ class convert_assy_file_to_contigs(object):
            "report_name" of String, parameter "report_ref" of String
         """
         return self._client.call_method(
-            'convert_assy_file_to_contigs.convert',
+            'gaprice_convert_assy_file_to_contigs.convert',
             [params], self._service_ver, context)

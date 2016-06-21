@@ -1,4 +1,4 @@
-package us.kbase.convertassyfiletocontigs;
+package us.kbase.gapriceconvertassyfiletocontigs;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.File;
@@ -13,19 +13,19 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UnauthorizedException;
 
 /**
- * <p>Original spec-file module name: convert_assy_file_to_contigs</p>
+ * <p>Original spec-file module name: gaprice_convert_assy_file_to_contigs</p>
  * <pre>
  * A KBase module: convert_assy_file_to_contigs
  * </pre>
  */
-public class ConvertAssyFileToContigsClient {
+public class GapriceConvertAssyFileToContigsClient {
     private JsonClientCaller caller;
 
 
     /** Constructs a client with a custom URL and no user credentials.
      * @param url the URL of the service.
      */
-    public ConvertAssyFileToContigsClient(URL url) {
+    public GapriceConvertAssyFileToContigsClient(URL url) {
         caller = new JsonClientCaller(url);
     }
     /** Constructs a client with a custom URL.
@@ -35,7 +35,7 @@ public class ConvertAssyFileToContigsClient {
      * @throws IOException if an IOException occurs when checking the token's
      * validity.
      */
-    public ConvertAssyFileToContigsClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
+    public GapriceConvertAssyFileToContigsClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, token);
     }
 
@@ -47,7 +47,7 @@ public class ConvertAssyFileToContigsClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public ConvertAssyFileToContigsClient(URL url, String user, String password) throws UnauthorizedException, IOException {
+    public GapriceConvertAssyFileToContigsClient(URL url, String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password);
     }
 
@@ -142,8 +142,8 @@ public class ConvertAssyFileToContigsClient {
      * <p>Original spec-file function name: convert</p>
      * <pre>
      * </pre>
-     * @param   params   instance of type {@link us.kbase.convertassyfiletocontigs.ConvertParams ConvertParams}
-     * @return   parameter "output" of type {@link us.kbase.convertassyfiletocontigs.ConvertOutput ConvertOutput}
+     * @param   params   instance of type {@link us.kbase.gapriceconvertassyfiletocontigs.ConvertParams ConvertParams}
+     * @return   parameter "output" of type {@link us.kbase.gapriceconvertassyfiletocontigs.ConvertOutput ConvertOutput}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
@@ -151,7 +151,7 @@ public class ConvertAssyFileToContigsClient {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<ConvertOutput>> retType = new TypeReference<List<ConvertOutput>>() {};
-        List<ConvertOutput> res = caller.jsonrpcCall("convert_assy_file_to_contigs.convert", args, retType, true, true, jsonRpcContext);
+        List<ConvertOutput> res = caller.jsonrpcCall("gaprice_convert_assy_file_to_contigs.convert", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 }

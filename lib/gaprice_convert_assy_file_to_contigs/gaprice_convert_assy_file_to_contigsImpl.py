@@ -2,10 +2,10 @@
 #END_HEADER
 
 
-class convert_assy_file_to_contigs:
+class gaprice_convert_assy_file_to_contigs:
     '''
     Module Name:
-    convert_assy_file_to_contigs
+    gaprice_convert_assy_file_to_contigs
 
     Module Description:
     A KBase module: convert_assy_file_to_contigs
@@ -19,7 +19,7 @@ class convert_assy_file_to_contigs:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = ""
-    GIT_COMMIT_HASH = "787a649ed8ec35da032e89eb88ab4b4081a5660b"
+    GIT_COMMIT_HASH = "54117b5b1793d90adf935f2982f367f5c0ddaf40"
     
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER

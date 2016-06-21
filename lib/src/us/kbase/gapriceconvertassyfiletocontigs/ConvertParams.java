@@ -1,5 +1,5 @@
 
-package us.kbase.convertassyfiletocontigs;
+package us.kbase.gapriceconvertassyfiletocontigs;
 
 import java.util.HashMap;
 import java.util.Map;

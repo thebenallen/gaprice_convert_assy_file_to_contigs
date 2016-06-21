@@ -37,14 +37,14 @@ def get_config():
     retconfig = {}
     config = ConfigParser()
     config.read(get_config_file())
-    for nameval in config.items(get_service_name() or 'convert_assy_file_to_contigs'):
+    for nameval in config.items(get_service_name() or 'gaprice_convert_assy_file_to_contigs'):
         retconfig[nameval[0]] = nameval[1]
     return retconfig
 
 config = get_config()
 
-from convert_assy_file_to_contigs.convert_assy_file_to_contigsImpl import convert_assy_file_to_contigs
-impl_convert_assy_file_to_contigs = convert_assy_file_to_contigs(config)
+from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsImpl import gaprice_convert_assy_file_to_contigs
+impl_gaprice_convert_assy_file_to_contigs = gaprice_convert_assy_file_to_contigs(config)
 
 
 class JSONObjectEncoder(json.JSONEncoder):
@@ -316,7 +316,7 @@ class Application(object):
                                    context['method'], context['call_id'])
 
     def __init__(self):
-        submod = get_service_name() or 'convert_assy_file_to_contigs'
+        submod = get_service_name() or 'gaprice_convert_assy_file_to_contigs'
         self.userlog = log.log(
             submod, ip_address=True, authuser=True, module=True, method=True,
             call_id=True, changecallback=self.logcallback,
@@ -327,12 +327,12 @@ class Application(object):
         self.serverlog.set_log_level(6)
         self.rpc_service = JSONRPCServiceCustom()
         self.method_authentication = dict()
-        self.rpc_service.add(impl_convert_assy_file_to_contigs.convert,
-                             name='convert_assy_file_to_contigs.convert',
+        self.rpc_service.add(impl_gaprice_convert_assy_file_to_contigs.convert,
+                             name='gaprice_convert_assy_file_to_contigs.convert',
                              types=[dict])
-        self.method_authentication['convert_assy_file_to_contigs.convert'] = 'required'
-        self.rpc_service.add(impl_convert_assy_file_to_contigs.status,
-                             name='convert_assy_file_to_contigs.status',
+        self.method_authentication['gaprice_convert_assy_file_to_contigs.convert'] = 'required'
+        self.rpc_service.add(impl_gaprice_convert_assy_file_to_contigs.status,
+                             name='gaprice_convert_assy_file_to_contigs.status',
                              types=[dict])
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',
@@ -383,7 +383,7 @@ class Application(object):
                         if token is None and auth_req == 'required':
                             err = JSONServerError()
                             err.data = "Authentication required for " + \
-                                "convert_assy_file_to_contigs but no authentication header was passed"
+                                "gaprice_convert_assy_file_to_contigs but no authentication header was passed"
                             raise err
                         elif token is None and auth_req == 'optional':
                             pass

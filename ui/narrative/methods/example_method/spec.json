@@ -25,7 +25,7 @@
     "behavior": {
         "service-mapping": {
             "url": "",
-            "name": "convert_assy_file_to_contigs",
+            "name": "gaprice_convert_assy_file_to_contigs",
             "method": "your_method",
             "input_mapping": [
                 {

@@ -1,5 +1,5 @@
 module-name:
-    convert_assy_file_to_contigs
+    gaprice_convert_assy_file_to_contigs
 
 module-description:
     A KBase module

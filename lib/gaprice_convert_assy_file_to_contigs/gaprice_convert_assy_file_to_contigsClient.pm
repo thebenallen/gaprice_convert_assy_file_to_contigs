@@ -1,4 +1,4 @@
-package convert_assy_file_to_contigs::convert_assy_file_to_contigsClient;
+package gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient;
 
 use JSON::RPC::Client;
 use POSIX;
@@ -21,7 +21,7 @@ our $VERSION = "0.1.0";
 
 =head1 NAME
 
-convert_assy_file_to_contigs::convert_assy_file_to_contigsClient
+gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient
 
 =head1 DESCRIPTION
 
@@ -37,7 +37,7 @@ sub new
     
 
     my $self = {
-	client => convert_assy_file_to_contigs::convert_assy_file_to_contigsClient::RpcClient->new,
+	client => gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient::RpcClient->new,
 	url => $url,
 	headers => [],
     };
@@ -120,8 +120,8 @@ sub new
 =begin html
 
 <pre>
-$params is a convert_assy_file_to_contigs.ConvertParams
-$output is a convert_assy_file_to_contigs.ConvertOutput
+$params is a gaprice_convert_assy_file_to_contigs.ConvertParams
+$output is a gaprice_convert_assy_file_to_contigs.ConvertOutput
 ConvertParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
 	assembly_file has a value which is a string
@@ -136,8 +136,8 @@ ConvertOutput is a reference to a hash where the following keys are defined:
 
 =begin text
 
-$params is a convert_assy_file_to_contigs.ConvertParams
-$output is a convert_assy_file_to_contigs.ConvertOutput
+$params is a gaprice_convert_assy_file_to_contigs.ConvertParams
+$output is a gaprice_convert_assy_file_to_contigs.ConvertOutput
 ConvertParams is a reference to a hash where the following keys are defined:
 	workspace_name has a value which is a string
 	assembly_file has a value which is a string
@@ -181,7 +181,7 @@ ConvertOutput is a reference to a hash where the following keys are defined:
     }
 
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "convert_assy_file_to_contigs.convert",
+	method => "gaprice_convert_assy_file_to_contigs.convert",
 	params => \@args,
     });
     if ($result) {
@@ -207,7 +207,7 @@ ConvertOutput is a reference to a hash where the following keys are defined:
 sub version {
     my ($self) = @_;
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "convert_assy_file_to_contigs.version",
+        method => "gaprice_convert_assy_file_to_contigs.version",
         params => [],
     });
     if ($result) {
@@ -250,10 +250,10 @@ sub _validate_version {
         );
     }
     if ($sMinor > $cMinor) {
-        warn "New client version available for convert_assy_file_to_contigs::convert_assy_file_to_contigsClient\n";
+        warn "New client version available for gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient\n";
     }
     if ($sMajor == 0) {
-        warn "convert_assy_file_to_contigs::convert_assy_file_to_contigsClient version is $svr_version. API subject to change.\n";
+        warn "gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient version is $svr_version. API subject to change.\n";
     }
 }
 
@@ -347,7 +347,7 @@ report_ref has a value which is a string
 
 =cut
 
-package convert_assy_file_to_contigs::convert_assy_file_to_contigsClient::RpcClient;
+package gaprice_convert_assy_file_to_contigs::gaprice_convert_assy_file_to_contigsClient::RpcClient;
 use base 'JSON::RPC::Client';
 use POSIX;
 use strict;
