@@ -8,6 +8,7 @@ import time
 from os import environ
 import json
 from deep_eq import deep_eq
+import inspect
 try:
     from ConfigParser import ConfigParser  # py2 @UnusedImport
 except:
@@ -15,6 +16,7 @@ except:
 
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService  # @UnresolvedImport @IgnorePep8
 from workspace.client import Workspace
+from workspace.client import ServerError as WorkspaceError
 from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsImpl import gaprice_convert_assy_file_to_contigs  # @IgnorePep8
 from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsServer import MethodContext  # @IgnorePep8
 from gaprice_convert_assy_file_to_contigs.baseclient import BaseClient
@@ -219,6 +221,7 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
                            'ref': cls.make_ref(objdata)}
 
     def test_assyfile_to_cs_basic_ops(self):
+        print('*** running test test_assyfile_to_cs_basic _ops ***')
         staged = self.staged['assy_file']
         ref = staged['ref']
         bc = BaseClient(self.callbackURL)
@@ -271,3 +274,42 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
             expected = json.loads(f.read())
         expected['fasta_ref'] = staged['node']
         deep_eq(expected, cs['data'], _assert=True)
+
+    def test_no_ws(self):
+        err = 'workspace_name must be provided in params'
+        self.run_error(None, 'foo', 'foo', err)
+        self.run_error('', 'foo', 'foo', err)
+
+    def test_missing_ws(self):
+        err = ('Object foo cannot be accessed: No workspace with name ' +
+               'Ireallyhopethiswsdoesntexist exists')
+        self.run_error('Ireallyhopethiswsdoesntexist', 'foo', 'foo', err,
+                       exception=WorkspaceError)
+
+    def test_no_obj(self):
+        err = 'assembly_file must be provided in params'
+        self.run_error(self.getWsName(), None, 'foo', err)
+        self.run_error(self.getWsName(), '', 'foo', err)
+
+    def test_no_output(self):
+        err = 'output_name must be provided in params'
+        self.run_error(self.getWsName(), 'foo', None, err)
+        self.run_error(self.getWsName(), 'foo', '', err)
+
+    def test_bad_type(self):
+        err = 'This method only works on the KBaseFile.AssemblyFile type'
+        self.run_error(self.getWsName(), 'empty', 'foo', err)
+
+    def run_error(self, workspace, obj, output, error, exception=ValueError):
+
+        test_name = inspect.stack()[1][3]
+        print('\n***** starting expected fail test: ' + test_name + ' *****')
+
+        with self.assertRaises(exception) as context:
+            self.getImpl().convert(
+                self.ctx,
+                {'workspace_name': workspace,
+                 'assembly_file': obj,
+                 'output_name': output
+                 })
+        self.assertEqual(error, str(context.exception.message))
