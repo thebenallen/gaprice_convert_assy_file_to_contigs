@@ -291,35 +291,46 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         self.run_error(self.getWsName(), None, 'foo', err)
         self.run_error(self.getWsName(), '', 'foo', err)
 
+    def test_missing_obj(self):
+        err = ('No object with name Ireallyhopethisobjdoesntexist exists in ' +
+               'workspace ' + str(self.wsinfo[0]))
+        self.run_error(self.getWsName(), 'Ireallyhopethisobjdoesntexist',
+                       'foo', err, exception=WorkspaceError)
+
     def test_no_output(self):
         err = 'output_name must be provided in params'
         self.run_error(self.getWsName(), 'foo', None, err)
         self.run_error(self.getWsName(), 'foo', '', err)
 
+    def test_bad_output_name(self):
+        err = 'Illegal character in object name bad*name: *'
+        self.run_error(self.getWsName(), 'test_assy_file', 'bad*name', err,
+                       exception=WorkspaceError)
+
     def test_bad_type(self):
         err = 'This method only works on the KBaseFile.AssemblyFile type'
         self.run_error(self.getWsName(), 'empty', 'foo', err)
 
-    def test_assyfile_to_cs_fail_missing_data(self):
+    def test_missing_data(self):
         err = 'There is no sequence related to FASTA record: id2 desc2'
         self.run_error(self.getWsName(), 'test_assy_file_missing_data', 'foo',
                        err)
 
-    def test_assyfile_to_cs_fail_missing_data_last(self):
+    def test_missing_data_last(self):
         err = 'There is no sequence related to FASTA record: id4 desc4'
         self.run_error(self.getWsName(), 'test_assy_file_missing_data_last',
                        'foo', err)
 
-    def test_assyfile_to_cs_fail_missing_data_whitespace(self):
+    def test_missing_data_whitespace(self):
         err = 'There is no sequence related to FASTA record: id3 desc3'
         self.run_error(self.getWsName(), 'test_assy_file_missing_data_ws',
                        'foo', err)
 
-    def test_assyfile_to_cs_fail_empty_file(self):
+    def test_empty_file(self):
         err = 'There are no contigs in this file'
         self.run_error(self.getWsName(), 'test_assy_file_empty', 'foo', err)
 
-    def test_assyfile_to_cs_fail_bad_shock_node(self):
+    def test_bad_shock_node(self):
         err = 'Node not found'
         self.run_error(self.getWsName(), 'test_assy_file_bad_node', 'foo', err)
 
