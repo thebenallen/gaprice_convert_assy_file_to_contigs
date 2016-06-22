@@ -4,8 +4,9 @@ import os
 import re
 import requests
 import json
-from biokbase.workspace.client import Workspace  # @UnresolvedImport
+from workspace.client import Workspace
 import uuid
+import numpy as np
 #END_HEADER
 
 
@@ -29,11 +30,15 @@ class gaprice_convert_assy_file_to_contigs:
     GIT_COMMIT_HASH = "54117b5b1793d90adf935f2982f367f5c0ddaf40"
     
     #BEGIN_CLASS_HEADER
+
+    URL_WS = 'workspace-url'
+    URL_SHOCK = 'shock-url'
+
     def download_workspace_data(self, source_ws, source_obj, token):
 
         ws = Workspace(self.workspaceURL, token=token)
         objdata = ws.get_objects2(
-            [{'ref': source_ws + '/' + source_obj}])['data'][0]
+            {'objects': [{'ref': source_ws + '/' + source_obj}]})['data'][0]
         info = objdata['info']
         if info[2].split('-')[0] != 'KBaseFile.AssemblyFile':
             raise ValueError(
@@ -60,7 +65,7 @@ class gaprice_convert_assy_file_to_contigs:
                     break
                 f.write(block)
 
-        return shock_id, source
+        return info[6], shock_id, source
 
     # adapted from
     # https://github.com/kbase/transform/blob/master/plugins/scripts/convert/trns_transform_KBaseFile_AssemblyFile_to_KBaseGenomes_ContigSet.py
@@ -81,9 +86,9 @@ class gaprice_convert_assy_file_to_contigs:
             shock_id: Shock id for the fasta file if it already exists in shock
         """
 
-        self.log('Starting conversion of FASTA to KBaseGenomes.ContigSet')
+        print('Starting conversion of FASTA to KBaseGenomes.ContigSet')
 
-        self.log('Building Object.')
+        print('Building Object.')
 
         if not os.path.isfile(input_file_name):
             raise Exception('The input file name {0} is not a file!'.format(
@@ -95,7 +100,7 @@ class gaprice_convert_assy_file_to_contigs:
         fasta_filesize = os.stat(input_file_name).st_size
         if fasta_filesize > 900000000:
             # Fasta file too large to save sequences into the ContigSet object.
-            self.log(
+            print(
                 'The FASTA input file is too large to fit in the workspace. ' +
                 'A ContigSet object will be created without sequences, but ' +
                 'will contain a reference to the file.')
@@ -220,10 +225,10 @@ class gaprice_convert_assy_file_to_contigs:
 
         contig_set_dict['fasta_ref'] = shock_id
 
-        self.log('Conversion completed.')
+        print('Conversion completed.')
         return contig_set_dict
 
-    def load_report(self, contigset, cs_ref, wscli, wsn, output,
+    def load_report(self, contigset, cs_ref, wscli, wsn, wsid, output,
                     provenance):
         lengths = [contig['length'] for contig in contigset['contigs']]
 
@@ -250,7 +255,7 @@ class gaprice_convert_assy_file_to_contigs:
 
         reportName = 'convert_report_' + str(uuid.uuid4())
         report_obj_info = wscli.save_objects({
-                'name': wsn,
+                'id': wsid,
                 'objects': [
                     {
                         'type': 'KBaseReport.Report',
@@ -263,6 +268,11 @@ class gaprice_convert_assy_file_to_contigs:
             })[0]
         reportRef = self.make_ref(report_obj_info)
         return reportName, reportRef
+
+    def make_ref(self, object_info):
+        return str(object_info[6]) + '/' + str(object_info[0]) + \
+            '/' + str(object_info[4])
+
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -302,39 +312,44 @@ class gaprice_convert_assy_file_to_contigs:
         spades, & Jason's CS uploader for best practices'''
 
         wsn = params.get('workspace_name')
+        if not wsn:
+            raise ValueError('workspace_name must be provided in params')
         input_ = params.get('assembly_file')
+        if not input_:
+            raise ValueError('assembly_file must be provided in params')
         output = params.get('output_name')
+        if not output:
+            raise ValueError('output_name must be provided in params')
         token = ctx.get('token')
-        shock_id, source = self.download_workspace_data(
-            wsn, input_, self.scratch, token)
-
+        if not token:
+            raise ValueError('no token in context object')
+        wsid, shock_id, source = self.download_workspace_data(
+            wsn, input_, token)
         inputfile = os.path.join(self.scratch, input_)
 
         cs = self.convert_to_contigs(inputfile, source, output, shock_id)
 
         ws = Workspace(self.workspaceURL, token=token)
         new_obj_info = ws.save_objects({
-                'name': wsn,
+                'id': wsid,
                 'objects': [
                     {
                         'type': 'KBaseGenomes.ContigSet',
                         'data': cs,
                         'name': output,
-                        'provenance': ctx.get_provenance()
+                        'provenance': ctx.provenance()
                     }
                 ]
             })[0]
         cs_ref = self.make_ref(new_obj_info)
 
         report_name, report_ref = self.load_report(
-            cs, cs_ref, ws, wsn, output, ctx.get_provenance())
+            cs, cs_ref, ws, wsn, wsid, output, ctx.provenance())
 
         output = {'report_name': report_name,
                   'report_ref': report_ref
                   }
 
-        # TODO report
-        output = None
         #END convert
 
         # At some point might do deeper type checking...
