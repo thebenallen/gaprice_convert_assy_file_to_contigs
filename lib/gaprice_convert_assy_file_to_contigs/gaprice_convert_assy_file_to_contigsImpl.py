@@ -59,7 +59,7 @@ class gaprice_convert_assy_file_to_contigs:
                     print("Couldn't parse response error content: " +
                           response.content)
                     response.raise_for_status()
-                raise Exception(str(err))
+                raise ValueError(str(err))
             for block in response.iter_content(1024):
                 if not block:
                     break
@@ -91,7 +91,7 @@ class gaprice_convert_assy_file_to_contigs:
         print('Building Object.')
 
         if not os.path.isfile(input_file_name):
-            raise Exception('The input file name {0} is not a file!'.format(
+            raise ValueError('The input file name {0} is not a file!'.format(
                 input_file_name))
 
         # default if not too large
@@ -119,7 +119,7 @@ class gaprice_convert_assy_file_to_contigs:
                     # found a header line
                     # Wrap up previous fasta sequence
                     if (not sequence_list) and first_header_found:
-                        raise Exception(
+                        raise ValueError(
                             'There is no sequence related to FASTA record: {0}'
                             .format(fasta_header))
                     if not first_header_found:
@@ -129,7 +129,7 @@ class gaprice_convert_assy_file_to_contigs:
                         total_sequence = ''.join(sequence_list)
                         total_sequence = re.sub(pattern, '', total_sequence)
                         if not total_sequence:
-                            raise Exception(
+                            raise ValueError(
                                 'There is no sequence related to FASTA ' +
                                 'record: ' + fasta_header)
                         try:
@@ -167,17 +167,17 @@ class gaprice_convert_assy_file_to_contigs:
 
         # wrap up last fasta sequence, should really make this a method
         if (not sequence_list) and first_header_found:
-            raise Exception(
+            raise ValueError(
                 "There is no sequence related to FASTA record: {0}".format(
                     fasta_header))
         elif not first_header_found:
-            raise Exception("There are no contigs in this file")
+            raise ValueError("There are no contigs in this file")
         else:
             # build up sequence and remove all white space
             total_sequence = ''.join(sequence_list)
             total_sequence = re.sub(pattern, '', total_sequence)
             if not total_sequence:
-                raise Exception(
+                raise ValueError(
                     "There is no sequence related to FASTA record: " +
                     fasta_header)
             try:

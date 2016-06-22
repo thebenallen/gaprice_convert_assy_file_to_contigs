@@ -300,6 +300,29 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         err = 'This method only works on the KBaseFile.AssemblyFile type'
         self.run_error(self.getWsName(), 'empty', 'foo', err)
 
+    def test_assyfile_to_cs_fail_missing_data(self):
+        err = 'There is no sequence related to FASTA record: id2 desc2'
+        self.run_error(self.getWsName(), 'test_assy_file_missing_data', 'foo',
+                       err)
+
+    def test_assyfile_to_cs_fail_missing_data_last(self):
+        err = 'There is no sequence related to FASTA record: id4 desc4'
+        self.run_error(self.getWsName(), 'test_assy_file_missing_data_last',
+                       'foo', err)
+
+    def test_assyfile_to_cs_fail_missing_data_whitespace(self):
+        err = 'There is no sequence related to FASTA record: id3 desc3'
+        self.run_error(self.getWsName(), 'test_assy_file_missing_data_ws',
+                       'foo', err)
+
+    def test_assyfile_to_cs_fail_empty_file(self):
+        err = 'There are no contigs in this file'
+        self.run_error(self.getWsName(), 'test_assy_file_empty', 'foo', err)
+
+    def test_assyfile_to_cs_fail_bad_shock_node(self):
+        err = 'Node not found'
+        self.run_error(self.getWsName(), 'test_assy_file_bad_node', 'foo', err)
+
     def run_error(self, workspace, obj, output, error, exception=ValueError):
 
         test_name = inspect.stack()[1][3]
