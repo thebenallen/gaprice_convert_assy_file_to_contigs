@@ -7,17 +7,17 @@ import time
 
 from os import environ
 import json
+from deep_eq import deep_eq
 try:
     from ConfigParser import ConfigParser  # py2 @UnusedImport
 except:
     from configparser import ConfigParser  # py3 @UnresolvedImport @Reimport
 
-from pprint import pprint
-
 from biokbase.AbstractHandle.Client import AbstractHandle as HandleService  # @UnresolvedImport @IgnorePep8
 from workspace.client import Workspace
 from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsImpl import gaprice_convert_assy_file_to_contigs  # @IgnorePep8
 from gaprice_convert_assy_file_to_contigs.gaprice_convert_assy_file_to_contigsServer import MethodContext  # @IgnorePep8
+from gaprice_convert_assy_file_to_contigs.baseclient import BaseClient
 
 FILE_LOC = 'data'
 
@@ -134,7 +134,6 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
         '''
         print('loading file to shock: ' + test_file)
         node = cls.upload_file_to_shock(test_file)
-        pprint(node)
         cls.nodes_to_delete.append(node['id'])
 
         print('creating handle for shock id ' + node['id'])
@@ -221,10 +220,54 @@ class convert_assy_file_to_contigsTest(unittest.TestCase):
 
     def test_assyfile_to_cs_basic_ops(self):
         staged = self.staged['assy_file']
-        res = self.getImpl().convert(
+        ref = staged['ref']
+        bc = BaseClient(self.callbackURL)
+        bc.call_method('CallbackServer.set_provenance',
+                       [{'service': 'myserv',
+                         'method': 'mymeth',
+                         'service_ver': '0.0.2',
+                         'method_params': ['foo', 'bar', 'baz'],
+                         'input_ws_objects': [ref]
+                         }]
+                       )
+        ret = self.getImpl().convert(
             self.ctx,
             {'workspace_name': self.getWsName(),
              'assembly_file': staged['obj_info'][1],
              'output_name': 'foobarbaz'
-             })
-        pprint(res)
+             })[0]
+
+        report = self.wsClient.get_objects([{'ref': ret['report_ref']}])[0]
+
+        self.assertEqual('KBaseReport.Report', report['info'][2].split('-')[0])
+        self.assertEqual(1, len(report['data']['objects_created']))
+        self.assertEqual('Assembled contigs',
+                         report['data']['objects_created'][0]['description'])
+        self.assertIn('Assembled into 4 contigs',
+                      report['data']['text_message'])
+
+        cs_ref = report['data']['objects_created'][0]['ref']
+        cs = self.wsClient.get_objects([{'ref': cs_ref}])[0]
+        self.assertEqual('KBaseGenomes.ContigSet', cs['info'][2].split('-')[0])
+
+        rep_prov = report['provenance']
+        cs_prov = cs['provenance']
+        self.assertEqual(len(rep_prov), 1)
+        self.assertEqual(len(cs_prov), 1)
+        rep_prov = rep_prov[0]
+        cs_prov = cs_prov[0]
+        for p in [rep_prov, cs_prov]:
+            self.assertEqual(p['service'], 'myserv')
+            self.assertEqual(p['method'], 'mymeth')
+            self.assertEqual(p['service_ver'], '0.0.2')
+            self.assertEqual(p['method_params'], ['foo', 'bar', 'baz'])
+            self.assertEqual(p['input_ws_objects'], [ref])
+            self.assertEqual(p['resolved_ws_objects'], [ref])
+            sa = p['subactions']
+            self.assertEqual(len(sa), 0)
+            # don't check ver or commit since they can change from run to run
+
+        with open(os.path.join(FILE_LOC, 'ContigSetOut.json')) as f:
+            expected = json.loads(f.read())
+        expected['fasta_ref'] = staged['node']
+        deep_eq(expected, cs['data'], _assert=True)
