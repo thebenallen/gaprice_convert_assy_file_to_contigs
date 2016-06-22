@@ -1,0 +1,42 @@
+{
+    "contigs": [
+        {
+            "description": "desc1. Note MD5 is generated from uppercasing the sequence", 
+            "sequence": "MSLLFQQTVPLSHLHRSLDPPLCFRTHILLILLLLSRHLPGFTGSDCESADPSIVSAIAPGTATTSERDCPVRTAGSDPVPIGDSGTFFDVGTAAPELLSPNRHHMITRAKDGIRKPNPRYNLFTQKYTPSEPKTITSASQDGDKLCKKRCRH", 
+            "name": "id1", 
+            "length": 153, 
+            "id": "id1", 
+            "md5": "bbbd1d7c1c462c0b3bbf4b7d699002e3"
+        }, 
+        {
+            "description": "desc2. Note MD5 is generated from uppercasing the sequence", 
+            "sequence": "MFQFAKFSKSKERRLATELGYGFPIGDPWITDGISPWPFASESVLPSQCPGIHPMHSFRSCTQGTLNTTKISMKLTISDCGFEPLTEGFTVLHSTRATTCYHFLFNS", 
+            "name": "id2", 
+            "length": 107, 
+            "id": "id2", 
+            "md5": "5a6c2f721ad11e2316d04e6072acc2cb"
+        }, 
+        {
+            "description": "desc3. Note MD5 is generated from uppercasing the sequence", 
+            "sequence": "MTKREYNSQPEMLEGAKSIGAGAATIASAGAAIGIGNVFSSLIHSVARNPSLATTTVLVVTLTLLGGVAAFYLHSFRLKGPLKKIIYLFLVFFIAVGISLIRIKAIHLLGLALPLLVPPLVWNAIGGGGEALPSTGPNGASSYSEWFTYTSDLEDSASSGRTSSSVNQPIQREQAGPSNALPEPAASPVAQQQDHLDQPFGEGGEREARAQEHDRISAEVETITSACENLEAAMVRKAHILLHQRGVTLGDPEDVKRALQLALHDDWEHDIDDRKRHFTVLRRDFGTARCERWNPFIDELRGLGNRQVNARHYVD", 
+            "name": "id3", 
+            "length": 315, 
+            "id": "id3", 
+            "md5": "d56a5655d9cddaf07529cb2deb4b554f"
+        }, 
+        {
+            "description": "desc4. Note MD5 is generated from uppercasing the sequence", 
+            "sequence": "MSGVYLTVPQAPELINERIPSFTASCSEVAPEHSEMPLTVIYIVLPVVMESQLESTLDILWIPESYSTLMQENMGFPYHGRLQILAGARDSLYLGRDAVVLLCPSLPFPTFTKWLIQVILLLSYWGSGGFG", 
+            "name": "id4", 
+            "length": 131, 
+            "id": "id4", 
+            "md5": "ce77023adc6728ed962485febb7ffc85"
+        }
+    ], 
+    "fasta_ref": "FAKE", 
+    "name": "foobarbaz", 
+    "source": "JGI", 
+    "source_id": "546544ab0d8785589ead8b33", 
+    "id": "foobarbaz", 
+    "md5": "f4eab2ce8821bd24e8c1c0df1896918f"
+}
