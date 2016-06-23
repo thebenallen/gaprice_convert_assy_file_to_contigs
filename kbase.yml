@@ -2,13 +2,13 @@ module-name:
     gaprice_convert_assy_file_to_contigs
 
 module-description:
-    Convert a KBaseFile.AssemblyFile to a KBaseGenome.ContigSet
+    Convert a KBaseFile.AssemblyFile to a KBaseGenomes.ContigSet
 
 service-language:
     python
 
 module-version:
-    0.0.1
+    1.0.0
 
 owners:
     [gaprice]
