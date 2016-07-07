@@ -37,8 +37,8 @@ class gaprice_convert_assy_file_to_contigs:
     def download_workspace_data(self, source_ws, source_obj, token):
 
         ws = Workspace(self.workspaceURL, token=token)
-        objdata = ws.get_objects2(
-            {'objects': [{'ref': source_ws + '/' + source_obj}]})['data'][0]
+        objdata = ws.get_objects(
+            [{'ref': source_ws + '/' + source_obj}])[0]
         info = objdata['info']
         if info[2].split('-')[0] != 'KBaseFile.AssemblyFile':
             raise ValueError(
